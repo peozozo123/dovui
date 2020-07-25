@@ -14,7 +14,6 @@ class _LoadingState extends State<Loading> {
     var databasesPath = await getDatabasesPath();
     var path = Path.join(databasesPath, "data.db");
     var exists = await databaseExists(path);
-
     if (!exists) {
       print("Creating new copy from asset");
       try {
@@ -29,8 +28,6 @@ class _LoadingState extends State<Loading> {
     } else {
       print("Opening existing database");
     }
-    Database db = await openDatabase(path);
-    List<Map> list = await db.rawQuery('SELECT * FROM questions');
     Navigator.pushReplacementNamed(context, '/home');
   }
 

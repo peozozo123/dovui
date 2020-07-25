@@ -1,5 +1,4 @@
 import 'package:dovui/services/getHighScore.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as Path;
@@ -18,8 +17,10 @@ class _HomeState extends State<Home> {
     var path = Path.join(databasesPath, "data.db");
     Database db = await openDatabase(path);
     List<Map> list = await db.rawQuery('SELECT * FROM questions');
+    List<Map> highscore = await db.rawQuery('SELECT * FROM highscore');
     Navigator.pushReplacementNamed(context, '/quizpage', arguments: {
       'data': list,
+      'highscore': highscore,
     });
   }
 

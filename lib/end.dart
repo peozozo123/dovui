@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart' as Path;
 
 class EndPage extends StatefulWidget {
   @override
@@ -18,10 +19,13 @@ class _EndPageState extends State<EndPage> {
   final mycontroller = TextEditingController();
 
   saveScore() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('name', mycontroller.text);
-    prefs.setInt('score', data['score']);
-    print(prefs.getInt('score'));
+    var databasesPath = await getDatabasesPath();
+    var path = Path.join(databasesPath, "data.db");
+    Database db = await openDatabase(path);
+    db.rawQuery("UPDATE highscore SET name='" +
+        mycontroller.text +
+        "', score=" +
+        data['score'].toString());
   }
 
   @override

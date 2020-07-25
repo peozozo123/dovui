@@ -70,6 +70,7 @@ class _TruePageState extends State<TruePage> {
                     Navigator.pushReplacementNamed(context, '/quizpage',
                         arguments: {
                           'data': data['data'],
+                          'highscore': data['highscore'],
                           'currentSession': data['currentSession'],
                         });
                   },

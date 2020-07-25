@@ -7,7 +7,6 @@ import 'loading.dart';
 import 'true.dart';
 import "end.dart";
 import 'highscore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final cache = AudioCache(prefix: 'audios/');
 AudioPlayer player;
@@ -25,7 +24,6 @@ class _Handler extends WidgetsBindingObserver {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences.setMockInitialValues({});
   runApp(MaterialApp(initialRoute: '/loading', routes: {
     '/loading': (context) => Loading(),
     '/home': (context) => Home(),

@@ -1,16 +1,14 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class QuizPage extends StatefulWidget {
   @override
   _QuizPageState createState() => _QuizPageState();
 }
 
-int getRandomInt(int n) {
-  var ran = new Random();
-  var num = ran.nextInt(n - 1);
-  return num;
+List<int> shuffleQuestions(int n) {
+  var list = new List<int>.generate(100, (index) => index + 1);
+  list.shuffle();
+  return list;
 }
 
 class _QuizPageState extends State<QuizPage> {
@@ -22,12 +20,7 @@ class _QuizPageState extends State<QuizPage> {
 
   toTheEndPage() async {
     bool f = false;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('name')) {
-      prefs.setInt('score', 0);
-      prefs.setString('name', 'Chưa có người chơi');
-    }
-    if (currentSession['score'] > prefs.getInt('score')) {
+    if (currentSession['score'] > data['highscore'][0]['score']) {
       f = true;
     }
     Navigator.pushReplacementNamed(context, '/endpage', arguments: {
@@ -65,6 +58,7 @@ class _QuizPageState extends State<QuizPage> {
       currentSession['qq'] = qq;
       Navigator.pushReplacementNamed(context, '/truepage', arguments: {
         'data': data['data'],
+        'highscore': data['highscore'],
         'currentSession': currentSession,
       });
     } else {
@@ -105,12 +99,16 @@ class _QuizPageState extends State<QuizPage> {
     data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments;
     if (flag) {
       flag = false;
-      qq = getRandomInt(data['data'].length);
       if (!data.containsKey('currentSession')) {
-        currentSession.addAll({'maxFalse': 5, 'score': 0});
+        currentSession.addAll({
+          'maxFalse': 5,
+          'score': 0,
+          'list': shuffleQuestions(data['data'].length)
+        });
       } else
         currentSession = data['currentSession'];
     }
+    qq = currentSession['list'][currentSession['score']];
     return Scaffold(
         body: SafeArea(
       child: Column(
